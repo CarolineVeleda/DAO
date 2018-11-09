@@ -14,8 +14,8 @@ $m4 = new Usuario("Robson","111222333");
 $mdao->inserir($m);
 $mdao->inserir($m2);
 $mdao->inserir($m3);
+$udao->inserir($m4);
 
-/*
 print_r($m);
 $cod = $m2->getId();
 $mbuscada = $mdao->buscar($cod);
@@ -30,6 +30,6 @@ $mdao->alterar($m);
 $mdao->deletar($cod);
 echo "=============================================================\n";
 print_r($mdao->listar(10,0));
-*/
+
 
 ?>

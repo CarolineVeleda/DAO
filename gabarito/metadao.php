@@ -7,7 +7,7 @@ class MetaDao{
 		return pg_connect($scon);
 	}
 
-	public function listar($limit, $offset){
+	public function listar(int $limit, int $offset){
 		$conn = $this->criaConexao();
 		$sql = "SELECT * FROM meta LIMIT $1 OFFSET $2";
 		$res = pg_query_params($conn, $sql, array($limit, $offset));
@@ -23,23 +23,37 @@ class MetaDao{
 		return $listMetas;
 	}
 
-	public function buscar($cod){
+	public function buscar(int $cod){
 		$conn = $this->criaConexao();
-		$sql = "SELECT * FROM meta WHERE id = $1";
+		$sql = "SELECT id, m.nome as nome_met, decricao,prioridade, cpf, 	u.nome AS nome_usu, dtPrevisao
+			FROM meta m INNER JOIN usuario u
+			ON m.cpfUser = u.cpf
+			WHERE m.id=$1";
+		
+		
 		$res = pg_query_params($conn, $sql, array($cod));
 		$linha = pg_fetch_assoc($res);
         $m = new Meta($linha['nome'],$linha['descricao'],intval($linha['prioridade']));
-        $m->setId(intval($linha['id']));
+		$m->setId(intval($linha['id']));
+		$time = new DateTime($linha['dtPrevisao']);
+		$m->setDtPrevisao($time);
+		$u=new Usuario($linha['nome'],$linha['cpf']);
+		$m->setUsuario($u);
 		
 		pg_close($conn);
 		return $m;
 	} 
 
-	public function inserir($meta){
+	public function inserir(Meta $meta){
 		$conn = $this->criaConexao();
-		$sql2 ="INSERT INTO meta (nome, descricao, prioridade) 
-        VALUES ($1,$2,$3) RETURNING id"; 
-		$vetor = array($meta->getNome(), $meta->getDescricao(), $meta->getPrioridade(),$meta->getData());
+		$sql2 ="INSERT INTO meta (nome, descricao, prioridade,dtPrevisao,cpfUsuario) 
+        VALUES ($1,$2,$3,$4,$5) RETURNING id"; 
+		$vetor = array(
+			$meta->getNome(), 
+			$meta->getDescricao(), 
+			$meta->getPrioridade(),
+			$meta->getDtPrevisao()->date,
+			$meta->getUsuario()->getCpfUsuario());
 		
 		$res = pg_query_params($conn, $sql2, $vetor);
         $linha = pg_fetch_assoc($res);
@@ -47,13 +61,13 @@ class MetaDao{
 		pg_close($conn);
 	}
 
-	public function deletar($id){
+	public function deletar(int $id){
 		$conn = $this->criaConexao();
 		$sql = "DELETE FROM meta WHERE id = $1";
 		$res = pg_query_params($conn, $sql, array($id));
 		pg_close($conn);
 	}
-	public function alterar($meta){
+	public function alterar(Meta $meta){
 		$conn = $this->criaConexao();
 		$sql="UPDATE meta SET nome = $1, descricao = $2, 
 		  prioridade = $3 WHERE id = $4  ";
@@ -68,18 +82,18 @@ class MetaDao{
 }
 
 
-
+//pegar do datetime o date
 class UsuarioDao{
 	private function criaConexao(){
 		$scon="port=5432 host=localhost dbname=bdmeta user=postgres password=postgres";
 		return pg_connect($scon);
 	}
 
-	public function inserir($usuario){
+	public function inserir(Usuario $usuario){
 		$conn = $this->criaConexao();
 		$sql2 ="INSERT INTO usuario (nome, cpf) 
         VALUES ($1,$2) RETURNING cpf"; 
-		$vetor = array($usuario->getNome(), $usuario->getCpf());
+		$vetor = array($usuario->getNome(), $usuario->getCpfUsuario());
 		
 		$res = pg_query_params($conn, $sql2, $vetor);
         $linha = pg_fetch_assoc($res);

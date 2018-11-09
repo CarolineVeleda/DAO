@@ -8,11 +8,10 @@ class Meta{
     private $dtPrevisao;
     private $usuario;
 
-    public function __construct($nome, $descricao, $prioridade,$dtPrevisao){
+    public function __construct(string $nome, string $descricao, int $prioridade){
         $this->nome = $nome;
         $this->descricao = $descricao;
         $this->prioridade = $prioridade;
-        $this->dtPrevisao = $dtPrevisao;
     }
     public function getId(){
         return $this->id;
@@ -26,26 +25,26 @@ class Meta{
     public function getPrioridade(){
         return $this->prioridade;
     }
-    public function getData(){
+    public function getDtPrevisao(){
         return $this->data;
     }
     public function getUsuario(){
         return $this->usuario;
     }
-    public function setDescricao($descricao){
+    public function setDescricao(string $descricao){
         $this->descricao = $descricao;
     }
-    public function setPrioridade($prioridade){
+    public function setPrioridade(int $prioridade){
         if($prioridade>=1 && $prioridade<=5)
             $this->prioridade = $prioridade;
     }
-    public function setNome($nome){
+    public function setNome(string $nome){
         $this->nome = $nome;
     }
-    public function setUsuario($usuario){
+    public function setUsuario(Usuario $usuario){
         $this->usuario = $usuario;
     }
-    public function setId($id){
+    public function setId(int $id){
         $this->id = $id;
     }
     public function setData($data){
@@ -60,7 +59,7 @@ class Usuario{
     private $nome;
     private $cpf;
 
-    public function __construct($nome, $cpf){
+    public function __construct(string $nome, string $cpf){
         $this->nome = $nome;
         $this->cpf = $cpf;
     }
@@ -69,15 +68,15 @@ class Usuario{
         return $this->nome;
     }
 
-    public function getCpf(){
+    public function getCpfUsuario(){
         return $this->cpf;
     }
 
-    public function setNome($nome){
+    public function setNome(string $nome){
         $this->nome = $nome;
     }
 
-    public function setCpf($cpf){
+    public function setCpf(string $cpf){
         $this->cpf = $cpf;
     }
 
