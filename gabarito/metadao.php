@@ -52,12 +52,12 @@ class MetaDao{
 			$meta->getNome(), 
 			$meta->getDescricao(), 
 			$meta->getPrioridade(),
-			$meta->getDtPrevisao()->date,
+			$meta->getDtPrevisao()->date(),
 			$meta->getUsuario()->getCpfUsuario());
 		
 		$res = pg_query_params($conn, $sql2, $vetor);
         $linha = pg_fetch_assoc($res);
-        $meta->setId(intval($linha['id']));
+        //$meta->setId(intval($linha['id']));
 		pg_close($conn);
 	}
 
@@ -85,7 +85,7 @@ class MetaDao{
 //pegar do datetime o date
 class UsuarioDao{
 	private function criaConexao(){
-		$scon="port=5432 host=localhost dbname=bdmeta user=postgres password=postgres";
+		$scon="port=5432 host=localhost dbname=dbmeta user=postgres password=postgres";
 		return pg_connect($scon);
 	}
 

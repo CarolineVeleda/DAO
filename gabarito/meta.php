@@ -26,7 +26,7 @@ class Meta{
         return $this->prioridade;
     }
     public function getDtPrevisao(){
-        return $this->data;
+        return $this->dtPrevisao;
     }
     public function getUsuario(){
         return $this->usuario;
@@ -41,14 +41,14 @@ class Meta{
     public function setNome(string $nome){
         $this->nome = $nome;
     }
-    public function setUsuario(Usuario $usuario){
+    public function setUsuario($usuario){
         $this->usuario = $usuario;
     }
     public function setId(int $id){
         $this->id = $id;
     }
-    public function setData($data){
-        $this->data = $data;
+    public function setDtPrevisao($data){
+        $this->dtPrevisao = $data;
     }
 }
 
